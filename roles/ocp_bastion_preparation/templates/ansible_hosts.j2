@@ -1,7 +1,6 @@
 [OSEv3:children]
 masters
 infras
-#glusterfs
 apps
 etcd
 nodes
@@ -15,11 +14,6 @@ nodes
 {% for infra in infra_definition %}
 {{ infra.hostname }} openshift_hostname={{ infra.hostname }} ipv4addr={{ infra.private_ip }}
 {% endfor %}
-
-#[glusterfs]
-#{% for infra in infra_definition %}
-#{{ infra.hostname }} glusterfs_devices='[ "{{ gluster_device }}" ]' openshift_hostname={{ infra.hostname }} ipv4addr={{ infra.private_ip }}
-#{% endfor %}
 
 [apps]
 {% for node in node_definition %}
@@ -58,7 +52,7 @@ openshift_release=3.11
 openshift_deployment_type=openshift-enterprise
 openshift_disable_check=disk_availability,docker_storage,memory_availability
 
-openshift_node_groups=[{'name': 'node-config-master', 'labels': ['node-role.kubernetes.io/master=true','runtime=docker']}, {'name': 'node-config-infra', 'labels': ['node-role.kubernetes.io/infra=true','runtime=docker']}, {'name': 'node-config-glusterfs', 'labels': ['runtime=docker']}, {'name': 'node-config-compute', 'labels': ['node-role.kubernetes.io/compute=true','runtime=docker'], 'edits': [{ 'key': 'kubeletArguments.pods-per-core','value': ['20']}, { 'key': 'image-gc-high-threshold', 'value': ['85']}, { 'key': 'image-gc-low-threshold', 'value': ['75']}]}]
+openshift_node_groups=[{'name': 'node-config-master', 'labels': ['node-role.kubernetes.io/master=true','runtime=docker']}, {'name': 'node-config-infra', 'labels': ['node-role.kubernetes.io/infra=true','runtime=docker']}, {'name': 'node-config-compute', 'labels': ['node-role.kubernetes.io/compute=true','runtime=docker'], 'edits': [{ 'key': 'kubeletArguments.pods-per-core','value': ['20']}, { 'key': 'image-gc-high-threshold', 'value': ['85']}, { 'key': 'image-gc-low-threshold', 'value': ['75']}]}]
 
 # Configure logrotate scripts
 # See: https://github.com/nickhammond/ansible-logrotate
@@ -106,22 +100,6 @@ openshift_master_dynamic_provisioning_enabled=true
 # os_sdn_network_plugin_name='redhat/openshift-ovs-networkpolicy'
 os_sdn_network_plugin_name='redhat/openshift-ovs-subnet'
 
-# OpenShift Gluster CNS Vars
-#openshift_storage_glusterfs_wipe=true
-#openshift_storage_glusterfs_heketi_wipe=true
-#openshift_storage_glusterfs_storageclass=true
-#openshift_storage_glusterfs_storageclass_default=false
-#openshift_storage_glusterfs_block_deploy=true
-#openshift_storage_glusterfs_block_host_vol_create=true
-#openshift_storage_glusterfs_block_storageclass=true
-#openshift_storage_glusterfs_block_storageclass_default=false
-
-# OpenShift Router and Registry Vars
-#openshift_hosted_registry_storage_kind=glusterfs
-#openshift_hosted_registry_storage_volume_size=80Gi
-#openshift_hosted_registry_replicas=1
-#openshift_registry_selector='node-role.kubernetes.io/infra=true'
-
 # Setup azure blob registry storage
 openshift_hosted_registry_storage_kind=object
 openshift_hosted_registry_storage_azure_blob_accountkey=my-generated-key-storge-account
@@ -129,7 +107,6 @@ openshift_hosted_registry_storage_provider=azure_blob
 openshift_hosted_registry_storage_azure_blob_accountname=openshiftregistry1
 openshift_hosted_registry_storage_azure_blob_container=registry
 openshift_hosted_registry_storage_azure_blob_realm=core.windows.net
-
 
 openshift_hosted_router_replicas=1
 openshift_router_selector='node-role.kubernetes.io/infra=true'
@@ -143,9 +120,4 @@ template_service_broker_selector={"node-role.kubernetes.io/infra":"true"}
 
 ansible_service_broker_install=true
 ansible_service_broker_local_registry_whitelist=['.*-apb$']
-
-openshift_storage_glusterfs_heketi_image=registry.redhat.io/rhgs3/rhgs-volmanager-rhel7
-openshift_storage_glusterfs_image=registry.redhat.io/rhgs3/rhgs-server-rhel7
-openshift_storage_glusterfs_block_image=registry.redhat.io/rhgs3/rhgs-gluster-block-prov-rhel7
-openshift_storage_glusterfs_s3_image=registry.redhat.io/rhgs3/rhgs-gluster-s3-server-rhel7
 

@@ -4,7 +4,7 @@
 docker_device: /dev/sdc
 
 # Gluster Partiion on hosts
-gluster_device: /dev/sdd
+# gluster_device: /dev/sdd
 
 # Details configuration for
 azure_base_image:
@@ -48,8 +48,8 @@ infra_disk_size: 64
 infra_docker_type: "Standard_LRS"
 infra_docker_size: 32
 infra_public_ip_allocation: Static
-infra_gluster_type: "Standard_LRS"
-infra_gluster_size: 300
+#infra_gluster_type: "Standard_LRS"
+#infra_gluster_size: 300
 
 # NODE Definitions
 node_prefix: "{{ name }}-node"

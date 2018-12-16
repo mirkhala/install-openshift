@@ -25,7 +25,7 @@ This file contains all the necessary information you might need to have a basic 
 cloud_provider: azure
 
 name: openshift
-region: southcentralus
+region: eastus
 labels:
    host: openshift
 
@@ -44,7 +44,7 @@ azure_secret: wwwwwwww-wwww-wwww-wwww-wwwwwwwwwwww
 
 number_of_masters: 1
 number_of_infras: 1
-number_of_nodes: 2
+number_of_nodes: 1
 ```
 
 ## Step #1: Networking 
@@ -55,15 +55,25 @@ Now, all you need to do, it's to run the Ansible's playbooks that it will create
 $  ./step1_create_network.yaml
 ```
 
-## Step #2: Computing 
+## Step #2: Storage Account 
 
-Once the networking is ready, you may proceed with the creation of all the necessary computing capabilities in order to deploy the whole cluster
+Once the networking is ready, you may proceed with the creation of a storage account and added in roles/ocp_bastion_preparation/templates/ansible_hosts.j2
+
+```bash
+$ az storage account create --name openshiftregistry1 --resource-group openshift --location eastus --sku Standard_LRS
+$ az storage account keys list --account-name openshiftregistry1 --resource-group openshift --output table
+$ openshift_hosted_registry_storage_azure_blob_accountkey='myKey1'
+```
+
+## Step #4: Computing 
+
+Once the storage account is ready, you may proceed with the creation of all the necessary computing capabilities in order to deploy the whole cluster
 
 ```bash
 $ ./step2_create_computing.yaml
 ```
 
-## Step #3: OpenShift Installation
+## Step #5: OpenShift Installation
 
 The last step, will start the installation of OpenShift 
 

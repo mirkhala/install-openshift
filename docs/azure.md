@@ -75,7 +75,7 @@ $ ./step2_create_computing.yaml
 
 ## Step #5: OpenShift Installation
 
-The last step, will start the installation of OpenShift from the Bastion 
+The last step, will start the installation of OpenShift 
 
 ```bash
 $ ./step3_install_openshift.sh
